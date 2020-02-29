@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="vue.js"></script>
+    <title>TODO List</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <section id="app">
+      <time>
+        <span class="day"><b>{{ weekNames[date.getDay()] }}</b>, {{ date.getDate() }}th</span>
+        <p class="month">{{ monthNames[date.getMonth()] }}</p>
+      </time>
+
+      <button class="btn" @click="markAll = !markAll">
+        Clear List
+      </button>
+
+      <input
+        type="text"
+        class="input-add"
+        placeholder="Add todo..."
+        v-on:keyup.enter="addTodo"
+      />
+
+      <ul>
+        <li v-for="todo in todos">
+          <input type="checkbox" @click="check(todo)" :checked="todo.done" />
+          <del v-if="todo.done" class="mark-on text">{{ todo.text }}</del>
+          <span v-else class="mark-off text">{{ todo.text }}</span>
+          <i class="fas fa-times icon" @click="removeTodo(todo.id)"></i>
+        </li>
+      </ul>
+    </section>
+
+    <script
+      src="https://kit.fontawesome.com/671b0bdd48.js"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      new Vue({
+        el: "#app",
+        data: {
+          weekNames: [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Sunday"
+          ],
+          monthNames: [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December"
+          ],
+          date: new Date(),
+          todos: [
+            { text: "Go to the mall", done: false, id: Date.now() },
+            { text: "Buy bread", done: false, id: Date.now() + 1 }
+          ],
+          newOption: "",
+          markAll: "false"
+        },
+        methods: {
+          addTodo(event) {
+            const text = event.target.value;
+            if (text != "") {
+              this.todos.push({ text, done: false, id: Date.now() });
+            }
+            event.target.value = "";
+          },
+
+          removeTodo(id) {
+            this.todos = this.todos.filter(todo => todo.id !== id);
+          },
+
+          check(todo) {
+            todo.done = !todo.done;
+          }
+        },
+        watch: {
+          markAll() {
+            if (true) {
+              this.todos = [];
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
